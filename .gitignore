@@ -1,0 +1,18 @@
+node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+#Hardhat files
+cache
+artifacts
+contracts/Lock.sol
+Lock.sol
+test/my-test.js
+test/Lock.js
+my-test.js
+Lock.js
+contracts/Mock-ICO.sol
+contracts/Mock-token.sol
