@@ -53,10 +53,19 @@ contract AgameToken {
     uint public InvestorAccumulated = 0;
 
     /// the time when the contract was deployed
-    uint public start_time;
+    uint public startTime;
 
-    /// the time the tokens can be spent 
-    uint public transfer_time;
+    /// the time the tokens can be claimed after 3 months
+    uint public claimTime1;
+
+    /// the time the tokens can be claimed after 6 months
+    uint public claimTime2;
+
+    /// the time the tokens can be claimed after 9 months
+    uint public claimTime3;
+
+    // A mapping of addresses to their claim amount
+    mapping (address => uint) public claimAmount;
 
     /// @notice The admin address, ultimately this will be set to the governance contract address
     /// so the community can colletively decide some of the key parameters (e.g. maxStakeReward)
@@ -70,25 +79,25 @@ contract AgameToken {
     mapping (address => uint) internal level;
 
     /// having an array of addresses in a level
-    uint level_1;
-    address[] level1;
+    uint public level_1;
+    address[] public level1;
 
-    uint level_2;
-    address[] level2;
+    uint public level_2;
+    address[] public level2;
 
-    address[] level3;
-    uint level_3;
+    address[] public level3;
+    uint public level_3;
 
-    address[] level4;
-    uint level_4;
+    address[] public level4;
+    uint public level_4;
 
-    address[] level5;
-    uint level_5;
+    address[] public level5;
+    uint public level_5;
 
-    address[] level6;
-    uint level_6;
+    address[] public level6;
+    uint public level_6;
 
-    address[] level7;
+    address[] public level7;
 
     // a mapping of investors, to check if an address is an investor.
     mapping (address => bool) public investors;
@@ -120,6 +129,9 @@ contract AgameToken {
     /// @notice An event thats emitted when the airdropper address is changed
     event AirdropperChanged(address airdropper, address newAirdropper);
 
+    /// @notice An event that is emmited when token is claimed
+    event tokenClaimed(address owner, uint amount);
+
     /// @notice An event thats emitted when tokens are airdropped
     event TokenAirdropped(address airdropper);
 
@@ -142,8 +154,6 @@ contract AgameToken {
         return holders;
     }
 
-    uint investor_percent = 20;
-
     /**
      * @notice Construct a new Agame token
      * @param admin_ The account with admin permission
@@ -154,9 +164,13 @@ contract AgameToken {
         admin = admin_;
         emit AdminChanged(address(0), admin);
 
-        start_time = block.timestamp;
+        startTime = block.timestamp;
 
-        transfer_time = start_time + (6 * 892800); // six months after the token contract has depoled before the token can be spent (vesting of tokens).
+        claimTime1 = startTime + (3 * 892800); // 3 months after the token contract has deployed before the token can be spent (vesting of tokens).
+
+        claimTime2 = startTime + (6 * 892800); // 3 months after the token contract has deployed before the token can be spent (vesting of tokens).
+
+        claimTime3 = startTime + (9 * 892800); // 3 months after the token contract has deployed before the token can be spent (vesting of tokens).
 
         max_token_Supply = 10000000500000000000000000000;
 
@@ -248,8 +262,9 @@ contract AgameToken {
         uint bnb_price = 300;
         uint price_ = msg.value * bnb_price;
         uint _amount = price_ / token_price;
-        uint amount_ = _amount * (10 ** 18);
+        uint amount_ = (_amount * (10 ** 18)) / 4;
 
+        claimAmount[msg.sender] = amount_;
         totalSupply = totalSupply + amount_;
 
         // transfer the amount to the recipient
@@ -272,7 +287,9 @@ contract AgameToken {
         uint bnb_price = 300;
         uint price_ = msg.value * bnb_price;
         uint _amount = price_ / token_price;
-        uint amount_ = _amount * (10 ** 18);
+        uint amount_ = (_amount * (10 ** 18)) / 4;
+
+        claimAmount[msg.sender] = amount_;
 
         totalSupply = totalSupply + amount_;
 
@@ -284,6 +301,64 @@ contract AgameToken {
         
         emit Tokensold(msg.sender, _amount);
     }
+
+    // function to claim tokens after 3 months
+    function claimToken1() public {
+
+        require(InvestorAccumulated <= maxInvestors, "Bgame::ICO: All tokens for ICO have been sold");
+        require(totalSupply < max_token_Supply, "Minting has stoped");
+        require(block.timestamp > claimTime1, "You can not claim your tokens yet");
+
+        uint amount = claimAmount[msg.sender];
+
+        totalSupply = totalSupply + amount;
+
+        // transfer the amount to the recipient
+        mint(msg.sender, amount);
+
+        InvestorAccumulated = InvestorAccumulated + amount;
+        
+        emit tokenClaimed(msg.sender, amount);
+    }
+
+    // function to claim tokens after 6 months
+    function claimToken2() public {
+
+        require(InvestorAccumulated <= maxInvestors, "Bgame::ICO: All tokens for ICO have been sold");
+        require(totalSupply < max_token_Supply, "Minting has stoped");
+        require(block.timestamp > claimTime2, "You can not claim your tokens yet");
+
+        uint amount = claimAmount[msg.sender];
+
+        totalSupply = totalSupply + amount;
+
+        // transfer the amount to the recipient
+        mint(msg.sender, amount);
+
+        InvestorAccumulated = InvestorAccumulated + amount;
+        
+        emit tokenClaimed(msg.sender, amount);
+    }
+
+    // function to claim tokens after 9 months
+    function claimToken3() public {
+
+        require(InvestorAccumulated <= maxInvestors, "Bgame::ICO: All tokens for ICO have been sold");
+        require(totalSupply < max_token_Supply, "Minting has stoped");
+        require(block.timestamp > claimTime3, "You can not claim your tokens yet");
+
+        uint amount = claimAmount[msg.sender];
+
+        totalSupply = totalSupply + amount;
+
+        // transfer the amount to the recipient
+        mint(msg.sender, amount);
+
+        InvestorAccumulated = InvestorAccumulated + amount;
+        
+        emit tokenClaimed(msg.sender, amount);
+    }
+
 
     function token_investors() external returns (address[] memory) {
         return investors_list;

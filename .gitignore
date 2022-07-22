@@ -13,6 +13,6 @@ Lock.sol
 test/my-test.js
 test/Lock.js
 my-test.js
-Lock.js
-contracts/Mock-ICO.sol
-contracts/Mock-token.sol
+Lock.json
+contracts/MockLock.sol
+Mock.sol
