@@ -24,10 +24,8 @@ contract NFTcontract is ERC1155, Ownable {
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      *setting the contructor and calling that of ERC1155
      */
-    constructor() ERC1155("https://ipfs.infura.io/ipfs/QmTCWCMvbNqqB2ZfASEodUffEtMuvvNYTNfFvbSyy3aN14") {
-        for (uint i = 0; i < 1000; i++) {
-            mint(msg.sender, 1, i);
-        }
+    constructor() ERC1155("https://ipfs.infura.io/ipfs/QmdK4FkhvAvcgyAzx9u7JDh1KwXmG1QkDqdHyU91xbMA9J") {
+        mint(msg.sender, 0, 1);
     }
 
     function exists(uint256 tokenId) public returns (bool) {
@@ -36,6 +34,30 @@ contract NFTcontract is ERC1155, Ownable {
         }
         else{
             return false;
+        }
+    }
+
+    // function to Buy the NFTs
+    function buyNFT(uint tokenId) payable public {
+        uint price1 = 1 * (10 ** 18);
+        uint price2 = 5 * (10 ** 18);
+        uint price3 = 10 * (10 ** 18);
+        uint price4 = 20 * (10 ** 18);
+        if(tokenId == 1){
+            require(msg.value == price1, "The amount is insufficient");
+            mint(msg.sender, 1, 1);
+        }
+        else if(tokenId == 2){
+            require(msg.value == price2, "The amount is insufficient");
+            mint(msg.sender, 2, 1);
+        }
+        else if(tokenId == 3){
+            require(msg.value == price3, "The amount is insufficient");
+            mint(msg.sender, 3, 1);
+        }
+        else if(tokenId == 4){
+            require(msg.value == price4, "The amount is insufficient");
+            mint(msg.sender, 4, 1);
         }
     }
 
