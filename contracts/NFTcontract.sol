@@ -24,8 +24,11 @@ contract NFTcontract is ERC1155, Ownable {
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      *setting the contructor and calling that of ERC1155
      */
-    constructor() ERC1155("https://ipfs.infura.io/ipfs/QmdK4FkhvAvcgyAzx9u7JDh1KwXmG1QkDqdHyU91xbMA9J") {
-        mint(msg.sender, 0, 1);
+    constructor(address owner) ERC1155("https://ipfs.infura.io/ipfs/QmdK4FkhvAvcgyAzx9u7JDh1KwXmG1QkDqdHyU91xbMA9J") {
+        mint(owner, 1, 10);
+        mint(owner, 2, 10);
+        mint(owner, 3, 10);
+        mint(owner, 4, 10);
     }
 
     function exists(uint256 tokenId) public returns (bool) {
@@ -91,14 +94,6 @@ contract NFTcontract is ERC1155, Ownable {
         return _balances[id][account];
     }
 
-    /**
-     * @dev See {IERC1155-ownerOf}.
-     */
-    function ownerOf(uint256 tokenId) public view virtual returns (address owner) {
-        address owner = _owners[tokenId];
-        require(owner != address(0), "ERC1155: owner query for nonexistent token");
-        return owner;
-    }
 
     // function to transfer NFT
       function transferFrom(
