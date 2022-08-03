@@ -24,7 +24,7 @@ contract NFTcontract is ERC1155, Ownable {
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      *setting the contructor and calling that of ERC1155
      */
-    constructor(address owner) ERC1155("https://ipfs.infura.io/ipfs/QmdK4FkhvAvcgyAzx9u7JDh1KwXmG1QkDqdHyU91xbMA9J") {
+    constructor(address owner) ERC1155("ipfs://QmRZGcLzNLw4e5B8ZbtDTQoGjvoSjp3kZgKDenvFKBg2t3/{id}.json") {
         mint(owner, 1, 10);
         mint(owner, 2, 10);
         mint(owner, 3, 10);
